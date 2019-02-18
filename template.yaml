@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  envelopeApi
+  
+  Sample SAM Template for envelopeApi
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 300
+    Tracing: Active
+    CodeUri: code/
+    Runtime: go1.x
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function  
+    Properties:
+      Handler: hello-world
+
+
+  GreetFunction:
+    Type: AWS::Serverless::Function  
+    Properties:
+      Handler: greet
+
+  InitApiFunction:
+    Type: AWS::Serverless::Function  
+    Properties:
+      Handler: initApi
+      Events:
+        InitApi:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+
+  CallbackFunction:
+    Type: AWS::Serverless::Function  
+    Properties:
+      Handler: callback
+      Events:
+        InitApi:
+          Type: Api
+          Properties:
+            Path: /callbackUrl
+            Method: GET
