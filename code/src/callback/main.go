@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	models "envelopeApi/code/src/models"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -50,6 +51,9 @@ func authCode(code string) (map[string]interface{}, error) {
 }
 
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	db, err := models.InitDB()
+	var data models.Payload
+	defer db.Close()
 	code := req.QueryStringParameters["code"]
 	payload, err := authCode(code)
 	if err != nil {
@@ -59,12 +63,10 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	if err != nil {
 		fmt.Println(err)
 	}
-	var data Payload
-	json.Unmarshal(resp, &data)
-	fmt.Println(data.Login.Label)
-	fmt.Println(data.Login.Expires)
-	fmt.Println(data.Session.Expires)
 
+	json.Unmarshal(resp, &data)
+	fmt.Printf("%v\n", data)
+	data.Save(db)
 	return events.APIGatewayProxyResponse{
 		Body:       string(resp),
 		StatusCode: 200,

@@ -5,7 +5,7 @@
 *.so
 *.dylib
 
-code/src/github.com
+code/pkg
 # Test binary, build with `go test -c`
 *.test
 

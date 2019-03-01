@@ -1,11 +1,17 @@
-.PHONY: clean build
+.PHONY: clean build deps api
+
+deps: 
+	go mod download
 
 clean: 
-	rm -rf ./hello/hello-world
+	rm -rf ./bin/*
 	
 build:
 	
-	GOOS=linux GOARCH=amd64 go build -o code/hello-world ./code/src/hello
-	GOOS=linux GOARCH=amd64 go build -o code/callback ./code/src/callback
-	GOOS=linux GOARCH=amd64 go build -o code/greet ./code/src/greet
-	GOOS=linux GOARCH=amd64 go build -o code/initApi ./code/src/initApi
+	GOOS=linux GOARCH=amd64 go build -o bin/callback ./code/src/callback
+	GOOS=linux GOARCH=amd64 go build -o bin/accounts ./code/src/accounts
+	GOOS=linux GOARCH=amd64 go build -o bin/initApi ./code/src/initApi
+
+api:
+	make build
+	sam local start-api

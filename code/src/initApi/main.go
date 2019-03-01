@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	models "envelopeApi/code/src/models"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,7 +20,11 @@ const (
 )
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+
+	db, err := models.InitDB()
+	defer db.Close()
 	httpClient := &http.Client{}
+
 	body := map[string]string{"userHash": "test-user-id", "redirectUrl": callbackUrl}
 	payload, err := json.Marshal(&body)
 	if err != nil {

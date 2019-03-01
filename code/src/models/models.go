@@ -1,46 +1,32 @@
 package models
 
 import (
-	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 const (
-	dbhost = "192.168.0.36"
+	dbhost = "10.0.1.21"
+	// dbhost = "192.168.0.36"
 	dbport = "32768"
 	dbuser = "postgres"
 	dbpass = "mysecretpassword"
-	dbname = "postgres"
+	dbname = "envelope"
 )
 
-func dbConfig() map[string]string {
-	conf := make(map[string]string)
+var db *gorm.DB
 
-	conf[dbhost] = dbhost
-	conf[dbport] = dbport
-	conf[dbuser] = dbuser
-	conf[dbpass] = dbpass
-	conf[dbname] = dbname
-	return conf
-}
-
-var db *sql.DB
-
-func InitDB() *sql.DB {
-	config := dbConfig()
-	var err error
+func InitDB() (*gorm.DB, error) {
 	psqlInfo := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		config[dbhost], config[dbport], config[dbuser], config[dbpass], config[dbname])
-	db, err = sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	err = db.Ping()
+		dbhost, dbport, dbuser, dbpass, dbname)
+	var err error
+	db, err = gorm.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Connection Success")
-	return db
+
+	return db, err
 }
