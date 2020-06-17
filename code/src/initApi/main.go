@@ -10,17 +10,21 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
+var client, secret string
+
+
 const (
-	secret      = "043a97a8f3d27a749b6cde568737dbe36b0ef1c273683cd4ffd7f09c25989f38"
-	client      = "fadur-9ad89068-c4ec-4c98-afdf-631e177415f6"
 	url         = "https://api.nordicapigateway.com/v1/authentication/initialize"
 	callbackUrl = "http://localhost:3000/callbackUrl"
 )
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	client	= os.Getenv("CLIENT")
+	secret = os.Getenv("SECRET")
 	db, err := models.InitDB()
 	defer db.Close()
 	httpClient := &http.Client{}

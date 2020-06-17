@@ -1,6 +1,7 @@
 package models
 
 import (
+	// "fmt"
 	"github.com/jinzhu/gorm"
 )
 
@@ -8,9 +9,15 @@ type AccountPayload struct {
 	Accounts []Account `json:"accounts"`
 }
 
+func (a *AccountPayload) Save(db *gorm.DB) {
+	for _, account := range a.Accounts {
+		_account := account
+		db.Where(Account{ID: _account.ID}).Assign(&_account).FirstOrCreate(&account)
+	}
+}
+
 type Account struct {
-	gorm.Model
-	Id               string        `json:"id"`
+	ID               string        `gorm:"primary_key"json:"id"`
 	ProviderId       string        `json:"providerId"`
 	Name             string        `json:"name"`
 	Number           AccountNumber `json:"number"`

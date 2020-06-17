@@ -28,5 +28,6 @@ func InitDB() (*gorm.DB, error) {
 	}
 	fmt.Println("Connection Success")
 
+	db.LogMode(true)
 	return db, err
 }

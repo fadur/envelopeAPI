@@ -10,15 +10,20 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
+
+var client, secret string
 
 const (
 	url    = "https://api.nordicapigateway.com/v1/authentication/tokens"
-	secret = "043a97a8f3d27a749b6cde568737dbe36b0ef1c273683cd4ffd7f09c25989f38"
-	client = "fadur-9ad89068-c4ec-4c98-afdf-631e177415f6"
+
 )
 
 func authCode(code string) (map[string]interface{}, error) {
+
+	client	= os.Getenv("CLIENT")
+	secret  = os.Getenv("SECRET")
 	httpClient := &http.Client{}
 	body := map[string]string{"code": code}
 	payload, err := json.Marshal(&body)

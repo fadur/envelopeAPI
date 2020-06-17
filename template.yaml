@@ -12,18 +12,12 @@ Globals:
     Tracing: Active
     CodeUri: bin/
     Runtime: go1.x
+    Environment:
+      Variables:
+        SECRET: "secret"
+        CLIENT: "client"
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function  
-    Properties:
-      Handler: hello-world
-
-
-  GreetFunction:
-    Type: AWS::Serverless::Function  
-    Properties:
-      Handler: greet
 
   InitApiFunction:
     Type: AWS::Serverless::Function  

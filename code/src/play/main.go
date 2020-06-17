@@ -13,4 +13,7 @@ func main() {
 	}
 	db.AutoMigrate(models.Login{})
 	db.AutoMigrate(models.Session{})
+	db.AutoMigrate(models.Account{})
+	db.AutoMigrate(models.Category{})
+	db.AutoMigrate(models.Transactions{})
 }
